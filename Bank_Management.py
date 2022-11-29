@@ -1,6 +1,7 @@
 import  mysql.connector as sql
 
 def menu():
+    # Redirected to Here After Registering Or Logging INto an Account
     conn=sql.connect(host='localhost',user='root',passwd='glhf123',database='bank')
     cur = conn.cursor()
     conn.autocommit = True
@@ -11,6 +12,7 @@ def menu():
     print('5.QUIT')
     n=int(input('Enter your CHOICE='))
     if n == 1:
+        # To Create Bank Account
         acc_no=int(input('Enter your ACCOUNT NUMBER='))
         acc_name=input('Enter your ACCOUNT NAME=')
         ph_no=int(input('Enter your PHONE NUMBER='))
@@ -21,6 +23,7 @@ def menu():
         print('Account Created Succesfully!!!!!')
         conn.commit()
     if n == 2:
+        # To Do Transaction Operations
         acct_no=int(input('Enter Your Account Number='))
         cur.execute('select * from customer_details where acct_no='+str (acct_no) )
         data=cur.fetchall()
@@ -43,6 +46,7 @@ def menu():
                 conn.commit()
                 print('Account Updated Succesfully!!!!!')
     if n == 3:
+        # To Show the Details of the User 
         acc=input('Enter your ACCOUNT NO.=')
         acct_no=int(acc)
         cur.execute('select * from customer_details where acct_no='+str(acct_no) )
@@ -58,12 +62,14 @@ def menu():
                 print('ADDRESS:',row[3])
                 print('AVAILABLE BALANCE:',row[4]) 
     if n == 4:
+        # To Delete an Account Fully
         print('DELETE YOUR ACCOUNT')
         acct_no=int(input('Enter your account number='))
         xx='delete from customer_details where acct_no='+str(acct_no);
         cur.execute(xx)
         print('ACCOUNT DELETED SUCCESFULLY')
     if n == 5:
+        # Exits The Program Fully
         quit()
 
 def main():
