@@ -11,6 +11,7 @@ def menu():
     print('4.DELETE DETAILS')
     print('5.QUIT')
     n=int(input('Enter your CHOICE='))
+    print()
     if n == 1:
         # To Create Bank Account
         acc_no=int(input('Enter your ACCOUNT NUMBER='))
@@ -22,6 +23,7 @@ def menu():
         cur.execute(V_SQLInsert)
         print('Account Created Succesfully!!!!!')
         conn.commit()
+        print()
     if n == 2:
         # To Do Transaction Operations
         acct_no=int(input('Enter Your Account Number='))
@@ -35,19 +37,28 @@ def menu():
             print('1.WITHDRAW AMOUNT')
             print('2.ADD AMOUNT')
             x=int(input('Enter your Choice: '))
+            print()
             if x == 1:
-                amt=int(input('Enter withdrawl amount='))
-                cur.execute('update customer_details set cr_amt=cr_amt-'+str(amt) +  ' where acct_no=' +str(acct_no) )
-                conn.commit()
-                print('Account Updated Succesfully!!!!!')
+                cur.execute('select * from customer_details where acct_no='+str(acct_no) )
+                data=cur.fetchall()
+                for row in data:
+                    avail=row[4]
+                amt=int(input('Enter Withdrawl Amount='))
+                if avail>=amt:
+                    cur.execute('update customer_details set cr_amt=cr_amt-'+str(amt) +  ' where acct_no=' +str(acct_no) )
+                    conn.commit()
+                    print('Account Updated Succesfully!!!!!')
+                else:
+                    print("Insufficient Balance")
             if x== 2:
-                amt=int(input('Enter amount to be added='))
+                amt=int(input('Enter Amount to be Added='))
                 cur.execute('update customer_details set cr_amt=cr_amt+'+str(amt) +  ' where acct_no=' +str(acct_no) )
                 conn.commit()
                 print('Account Updated Succesfully!!!!!')
+            print()
     if n == 3:
         # To Show the Details of the User 
-        acc=input('Enter your ACCOUNT NO.=')
+        acc=input('Enter your ACCOUNT NO.: ')
         acct_no=int(acc)
         cur.execute('select * from customer_details where acct_no='+str(acct_no) )
         if cur.fetchone() is  None:
@@ -60,14 +71,15 @@ def menu():
                 print('ACCOUNT NAME:',row[1])
                 print('PHONE NUMBER:',row[2])
                 print('ADDRESS:',row[3])
-                print('AVAILABLE BALANCE:',row[4]) 
+                print('AVAILABLE BALANCE:',row[4])
+        print()
     if n == 4:
         # To Delete an Account Fully
-        print('DELETE YOUR ACCOUNT')
-        acct_no=int(input('Enter your account number='))
+        acct_no=int(input('Enter your Account Number to be Deleted: '))
         xx='delete from customer_details where acct_no='+str(acct_no);
         cur.execute(xx)
         print('ACCOUNT DELETED SUCCESFULLY')
+        print()
     if n == 5:
         # Exits The Program Fully
         quit()
@@ -79,24 +91,27 @@ def main():
     print('2.LOGIN')
     while True:
         n=int(input('Enter your Choice='))
+        print()
         if n== 1:
+            # Executes the Commands to Register a User
             name=input('Enter a Username=')
             passwd=int(input('Enter a 4 DIGIT Password='))
             V_SQLInsert="INSERT INTO user_table (passwrd,username) values (" +  str (passwd) + ",' " + name + " ');"
             cur.execute(V_SQLInsert)
             conn.commit()
-            print('USER created succesfully')  
+            print('USER created succesfully')
         elif  n==2 :
-                name=input('Enter your Username=')
-                passwd=int(input('Enter your 4 DIGIT Password='))
-                V_Sql_Sel="select * from user_table where passwrd='"+str (passwd)+"' and username=  ' " +name+ " ' ;"
-                cur.execute(V_Sql_Sel)
-                if cur.fetchone() is  None:
-                    print('Invalid Username or Password')
-                else:
-                    print()
-                    while True:
-                        menu()
+            # Executes the Commands to Login an Existing User
+            name=input('Enter your Username=')
+            passwd=int(input('Enter your 4 DIGIT Password='))
+            V_Sql_Sel="select * from user_table where passwrd='"+str (passwd)+"' and username=  ' " +name+ " ' ;"
+            cur.execute(V_Sql_Sel)
+            if cur.fetchone() is  None:
+                print('Invalid Username or Password')
+            else:
+                print()
+                while True:
+                    menu()
         else:
             print("Enter a Valid Input")
 
