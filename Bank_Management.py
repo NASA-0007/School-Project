@@ -1,8 +1,17 @@
 import  mysql.connector as sql
 
+conn=sql.connect(host='localhost',user='root',passwd='computer')
+if  conn.is_connected():
+    print('connected succesfully')
+cur = conn.cursor()
+cur.execute('create database if not exists bank')
+cur.execute('use bank')
+cur.execute('create table if not exists customer_details(acct_no int primary key,acct_name varchar(25),phone_no bigint(25),address varchar(25),cr_amt float)')
+cur.execute('create table if not exists user_table(username varchar(25) primary key,passwrd varchar(25) not null)')
+
 def menu():
     # Redirected to Here After Registering Or Logging Into an Account
-    conn=sql.connect(host='localhost',user='root',passwd='glhf123',database='bank')
+    conn=sql.connect(host='localhost',user='root',passwd='computer',database='bank')
     cur = conn.cursor()
     conn.autocommit = True
     print('1.CREATE BANK ACCOUNT')
@@ -85,7 +94,7 @@ def menu():
         quit()
 
 def main():
-    conn=sql.connect(host='localhost',user='root',passwd='glhf123',database='bank')
+    conn=sql.connect(host='localhost',user='root',passwd='computer',database='bank')
     cur = conn.cursor()
     print('1.REGISTER')
     print('2.LOGIN')
